@@ -36,6 +36,13 @@
       // This next line is important to to enable the renderer for WebXR
 			renderer.xr.enabled = true; // New!
 			container.appendChild(renderer.domElement);
+      
+      renderer.xr.addEventListener( 'sessionstart', function ( session ) {
+
+        console.log("session start");
+        console.log(session);
+
+      } );
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
@@ -72,27 +79,28 @@
 		}
 
 		function render() {
+      console.log(renderer.xr.isPresenting);
       const session = renderer.xr.getSession();
       // console.log(session);
       
-      if(session !== null) {
-        console.log(renderer.xr);
-        // console.log(session);
-        session.onvisibilitychange = (event) => {
-          switch(event.session.visibilityState) {
-            case "hidden":
-              console.log("hidden");
-              break;
-            case "blurred-visible":
-              console.log("blurred");
-              break;
-            case "visible":
-            default:
-              console.log("visible");
-              break;
-            }
-          };
-      }
+      // if(session !== null) {
+      //   console.log(renderer.xr);
+      //   // console.log(session);
+      //   session.onvisibilitychange = (event) => {
+      //     switch(event.session.visibilityState) {
+      //       case "hidden":
+      //         console.log("hidden");
+      //         break;
+      //       case "blurred-visible":
+      //         console.log("blurred");
+      //         break;
+      //       case "visible":
+      //       default:
+      //         console.log("visible");
+      //         break;
+      //       }
+      //     };
+      // }
 
 			renderer.render(scene, camera);
 		}
