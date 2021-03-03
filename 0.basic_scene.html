@@ -2,26 +2,18 @@
 <html lang="en">
 
 <head>
-	<title>webxr - model load</title>
+	<title>Basic Scene</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<meta name="author" content="Irene Alvarado">
+	<meta name="author" content="WebXR Academy">
 	<link type="text/css" rel="stylesheet" href="main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js"></script>
 </head>
 
 <body>
-	<div id="overlay-ui">
-	</div>
-	<div id="console-ui">
-	</div>
-
 	<script type="module">
-		// import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.module.js';
-		// import { ARButton } from '../threejs/jsm/webxr/ARButton.js';
-		// import { GLTFLoader } from '../threejs/jsm/loaders/GLTFLoader.js';
-
 		let container;
 		let camera, scene, renderer;
 		let controller;
@@ -57,15 +49,17 @@
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
+      const modelUrl = 'https://raw.githubusercontent.com/immersive-web/webxr-samples/main/media/gltf/space/space.gltf';
+      
 			// Load the GLTF space model
 			loader = new THREE.GLTFLoader();
 			loader.load(
 				// resource URL
-				'../model/space.gltf',
+				modelUrl,
 				// onLoad callback: what get's called once the full model has loaded
 				(gltf) => {
-					console.log("added model");
 					scene.add(gltf.scene);
+          console.log("model added to scene");
 				},
 				// onProgress callback: optional function for showing progress on model load
 				undefined,
@@ -75,8 +69,8 @@
 				}
 			);
 
-			// Add an AR button to the window
-			// document.body.appendChild(ARButton.createButton(renderer));
+			Add an AR button to the window
+			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
 		}

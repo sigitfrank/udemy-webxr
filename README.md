@@ -2,6 +2,7 @@ Welcome to Glitch
 =================
 
 Sample models: https://github.com/KhronosGroup/glTF-Sample-Models
+Space: https://github.com/immersive-web/webxr-samples/tree/main/media/gltf/space
 
 **Glitch** is the friendly community where you'll build the app of your dreams. Glitch lets you instantly create, remix, edit, and host an app, bot or site, and you can invite collaborators or helpers to simultaneously edit code with you.
 
