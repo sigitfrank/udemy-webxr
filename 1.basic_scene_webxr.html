@@ -73,9 +73,27 @@
 
 		function render() {
       const session = renderer.xr.getSession();
-      console.log(session.visibilityState)
-      console.log(renderer.xr.getSession());
-      visibilityState
+      // console.log(session);
+      
+      if(session !== null) {
+        console.log(renderer.xr);
+        // console.log(session);
+        session.onvisibilitychange = (event) => {
+          switch(event.session.visibilityState) {
+            case "hidden":
+              console.log("hidden");
+              break;
+            case "blurred-visible":
+              console.log("blurred");
+              break;
+            case "visible":
+            default:
+              console.log("visible");
+              break;
+            }
+          };
+      }
+
 			renderer.render(scene, camera);
 		}
 
