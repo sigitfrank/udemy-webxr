@@ -2,12 +2,13 @@
 <html lang="en">
 
 <head>
-	<title>More Objects Animated</title>
+	<title>3D Model Animated</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<meta name="author" content="WebXR Academy">
 	<link type="text/css" rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
@@ -15,7 +16,7 @@
     import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
     
 		let camera, scene, renderer;
-    let mesh, mesh2;
+		let loader;
 
 		init();
 		animate();
@@ -31,39 +32,43 @@
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
-      // This next line is important to to enable the renderer for WebXR
-			renderer.xr.enabled = true; // New!
+			renderer.xr.enabled = true; // we have to enable the renderer for webxr
 			container.appendChild(renderer.domElement);
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
-      
-      // Look for "geometry" in the three.js documentation to find all the geometry types
-      // https://threejs.org/docs/index.html
 
-      // Add a polyhedron shape to the scene
-      const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-      const material = new THREE.MeshPhongMaterial({
-        color      :  new THREE.Color("rgb(226,35,213)"),
-        shininess  :  6,
-        shading    :  THREE.FlatShading,
-        transparent: 1,
-        opacity    : 0.8
-      });
+      // Add a GLTF model to the scene
+      const modelUrl = 'https://raw.githubusercontent.com/immersive-web/webxr-samples/main/media/gltf/space/space.gltf';
       
-      mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0.2, 0, -0.5);
-      scene.add(mesh);
+			loader = new THREE.GLTFLoader();
       
-      // Add a second torus shape to the scene
-      const geometry2 = new THREE.TorusGeometry(0.15, 0.05, 12, 50);
-      const material2 = new THREE.MeshBasicMaterial({ 
-        color: new THREE.Color("rgb(253,253,150)") 
-      });
-      mesh2 = new THREE.Mesh(geometry2, material2);
-      mesh2.position.set(-0.2, 0, -1);
-      scene.add(mesh2);
+      // load the model
+      // loader takes in a few arguments loader(model url, onLoad callback, onProgress callback, onError callback)
+			loader.load(
+				// model URL
+				modelUrl,
+				// onLoad callback: what get's called once the full model has loaded
+				function (gltf) {
+          // gltf.scene contains the Three.js object group that represents the 3d object of the model
+					scene.add(gltf.scene);
+          console.log("Model added to scene");
+          
+          // you can optionally change the position of the model
+          // gltf.scene.position.z = -10; // negative Z moves the model in the opposite direction the camera is facing
+          // gltf.scene.position.y = 5; // positive Y moves the model up
+          // gltf.scene.position.x = 10; // positive X moves hte model to the right
+				},
+				// onProgress callback: optional function for showing progress on model load
+				function (xhr) {
+		      // console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+	      },
+				// onError callback
+				function (error) {
+					console.error(error);
+				}
+			);
 
 			document.body.appendChild(ARButton.createButton(renderer));
 
@@ -82,18 +87,8 @@
 		}
 
 		function render() {
-      rotateObjects();
 			renderer.render(scene, camera);
 		}
-    
-    function rotateObjects() {
-      // rotate the polyhedron on y
-      mesh.rotation.y = mesh.rotation.y - 0.01;
-      console.log(mesh.rotation);
-      
-      // rotate the torus on x
-      mesh2.rotation.x = mesh2.rotation.x - 0.01;
-    }
 
 	</script>
 </body>
