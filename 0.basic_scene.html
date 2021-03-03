@@ -16,6 +16,7 @@
 		let container;
 		let camera, scene, renderer;
 		let loader;
+    let cube;
 
 		init();
 		animate();
@@ -46,25 +47,27 @@
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
-      // Load the GLTF space model
-      const modelUrl = 'https://raw.githubusercontent.com/immersive-web/webxr-samples/main/media/gltf/space/space.gltf';
+      // Add a cube to the scene
+      // const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+      const geometry = new THREE.IcosahedronGeometry(0.1, 2)
+      const material = new THREE.MeshBasicMaterial({
+        color: 0x006994,
+        opacity: 0.3,
+      });
       
-			loader = new THREE.GLTFLoader();
-			loader.load(
-				// resource URL
-				modelUrl,
-				// onLoad callback: what get's called once the full model has loaded
-				(gltf) => {
-					scene.add(gltf.scene);
-          console.log("model added to scene");
-				},
-				// onProgress callback: optional function for showing progress on model load
-				undefined,
-				// onError callback
-				(error) => {
-					console.error(error);
-				}
-			);
+      var pinkMat = new THREE.MeshPhongMaterial({
+        color      :  new THREE.Color("rgb(226,35,213)"),
+        emissive   :  new THREE.Color("rgb(255,128,64)"),
+        specular   :  new THREE.Color("rgb(255,155,255)"),
+        shininess  :  10,
+        shading    :  THREE.FlatShading,
+        transparent: 1,
+        opacity    : 1
+      });
+      
+      cube = new THREE.Mesh(geometry, pinkMat);
+      cube.position.set(0, 0, -0.5);
+      scene.add(cube);
 
 			window.addEventListener('resize', onWindowResize, false);
 		}

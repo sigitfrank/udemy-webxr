@@ -18,6 +18,7 @@
 		let container;
 		let camera, scene, renderer;
 		let loader;
+    let cube;
 
 		init();
 		animate();
@@ -49,28 +50,21 @@
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
-      const modelUrl = 'https://raw.githubusercontent.com/immersive-web/webxr-samples/main/media/gltf/space/space.gltf';
+      // Add a cube to the scene
+      // const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+      const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+      var material = new THREE.MeshPhongMaterial({
+        color      :  new THREE.Color("rgb(226,35,213)"),
+        shininess  :  6,
+        shading    :  THREE.FlatShading,
+        transparent: 1,
+        opacity    : 0.8
+      });
       
-			// Load the GLTF space model
-			loader = new THREE.GLTFLoader();
-			loader.load(
-				// resource URL
-				modelUrl,
-				// onLoad callback: what get's called once the full model has loaded
-				(gltf) => {
-					scene.add(gltf.scene);
-          // gltf.scene.position.z = -10; // negative Z moves the model in the opposite direction the camera is facing
-          // gltf.scene.position.y = 5; // positive Y moves the model up
-          // gltf.scene.position.x = 10; // positive X moves hte model to the right
-          console.log("model added to scene");
-				},
-				// onProgress callback: optional function for showing progress on model load
-				undefined,
-				// onError callback
-				(error) => {
-					console.error(error);
-				}
-			);
+      cube = new THREE.Mesh(geometry, material);
+      cube.position.set(0, 0, -0.5);
+      scene.add(cube);
+
 
 			// Add an AR button to the window
 			document.body.appendChild(ARButton.createButton(renderer));
