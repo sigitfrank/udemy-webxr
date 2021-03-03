@@ -15,64 +15,62 @@
 	<script type="module">
     import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
     
-		let container;
 		let camera, scene, renderer;
-		let loader;
+		let loader; // we need to create a variable for a gltf model loader
 
 		init();
 		animate();
 
 		function init() {
-			container = document.createElement('div');
+			const container = document.createElement('div');
 			document.body.appendChild(container);
 
-			// All three.js scenes need three things: a scene, a camera, and a renderer
-			// For more info read: https://threejs.org/docs/#manual/en/introduction/Creating-a-scene
-
-			// #1 create the scene, although there's nothing in it just yet
 			scene = new THREE.Scene();
 
-			// #2 create the camera
 			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
-			// #3 Pick a three.js renderer
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			renderer.xr.enabled = true; // we have to enable the renderer for webxr
 			container.appendChild(renderer.domElement);
 
-			// Everything hereafter is optional things we want to add to the scene
-
-			// Add a light to the cene
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
+      // specify a model URL
       const modelUrl = 'https://raw.githubusercontent.com/immersive-web/webxr-samples/main/media/gltf/space/space.gltf';
       
-			// Load the GLTF space model
+			// create a GLTF loader object
 			loader = new THREE.GLTFLoader();
+      
+      // load the model
 			loader.load(
-				// resource URL
+				// model URL
 				modelUrl,
 				// onLoad callback: what get's called once the full model has loaded
-				(gltf) => {
+				function (gltf) {
+          // gltf.scene contains the Three.js object group that represents the 3d object of the model
 					scene.add(gltf.scene);
+          console.log("model added to scene");
+          
+          // you can optionally change the position of the model
           // gltf.scene.position.z = -10; // negative Z moves the model in the opposite direction the camera is facing
           // gltf.scene.position.y = 5; // positive Y moves the model up
           // gltf.scene.position.x = 10; // positive X moves hte model to the right
-          console.log("model added to scene");
 				},
 				// onProgress callback: optional function for showing progress on model load
-				undefined,
+				function (xhr) {
+		      console.log((xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+	      },
 				// onError callback
-				(error) => {
+				function (error) {
 					console.error(error);
 				}
 			);
 
-			// Add an AR button to the window
 			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
@@ -85,14 +83,10 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
 
-		// this function is only called one time
 		function animate() {
-			// here we set the render function to be called in a loop
 			renderer.setAnimationLoop(render);
 		}
 
-		// render function called on a loop every time the screen is refreshed
-		// which typically means 60 times a second (60 frames per second)
 		function render() {
 			renderer.render(scene, camera);
 		}
