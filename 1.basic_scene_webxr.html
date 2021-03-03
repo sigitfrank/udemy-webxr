@@ -36,11 +36,6 @@
       // This next line is important to to enable the renderer for WebXR
 			renderer.xr.enabled = true; // New!
 			container.appendChild(renderer.domElement);
-      
-      renderer.xr.addEventListener('sessionstart', function (event) {
-        console.log("session start");
-        console.log(event.target.getSession());
-      });
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
@@ -77,8 +72,6 @@
 		}
 
 		function render() {
-      console.log(renderer.xr.isPresenting);
-
 			renderer.render(scene, camera);
 		}
 
