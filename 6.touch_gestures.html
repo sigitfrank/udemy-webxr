@@ -51,17 +51,19 @@
 			window.addEventListener('resize', onWindowResize, false);
 		}
     
+    // this example is borrowed with slight modifications from three.js samples
+    // https://threejs.org/examples/?q=webxr#webxr_ar_cones
     function onSelect() {
-      const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+      const geometry = new THREE.ConeGeometry( 0.1, 0.2, 32 ).rotateX(Math.PI / 2);;
       const material = new THREE.MeshPhongMaterial({
-        color      :  new THREE.Color("rgb(226,35,213)"),
+        color      :  0xffffff * Math.random(),
         shininess  :  6,
         flatShading:  true,
         transparent: 1,
         opacity    : 0.8
       });
-      
       mesh = new THREE.Mesh(geometry, material);
+      
       mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld );
       mesh.quaternion.setFromRotationMatrix( controller.matrixWorld );
       
