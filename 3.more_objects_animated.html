@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Basic Scene with WebXR</title>
+	<title>More Objects</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<meta name="author" content="WebXR Academy">
@@ -12,12 +12,10 @@
 
 <body>
 	<script type="module">
-    // To start an AR scene with webXR, we can use a handy button provided by three.js
-    // We first have to import it because it is a javascript module
     import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
     
 		let camera, scene, renderer;
-    let mesh;
+    let mesh, mesh2;
 
 		init();
 		animate();
@@ -40,7 +38,11 @@
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
+      
+      // Look for "geometry" in the three.js documentation to find all the geometry types
+      // https://threejs.org/docs/index.html
 
+      // Add a polyhedron shape to the scene
       const geometry = new THREE.IcosahedronGeometry(0.1, 1);
       const material = new THREE.MeshPhongMaterial({
         color      :  new THREE.Color("rgb(226,35,213)"),
@@ -51,10 +53,18 @@
       });
       
       mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0, 0, -0.5);
+      mesh.position.set(0.2, 0, -0.5);
       scene.add(mesh);
+      
+      // Add a second torus shape to the scene
+      const geometry2 = new THREE.TorusGeometry(0.15, 0.05, 12, 50);
+      const material2 = new THREE.MeshBasicMaterial({ 
+        color: new THREE.Color("rgb(253,253,150)") 
+      });
+      mesh2 = new THREE.Mesh(geometry2, material2);
+      mesh2.position.set(-0.2, 0, -1);
+      scene.add(mesh2);
 
-			// Add the AR button to the body of the DOM
 			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
@@ -68,6 +78,8 @@
 		}
 
 		function animate() {
+      mesh.rotation.y -= 0.005;
+      
 			renderer.setAnimationLoop(render);
 		}
 
