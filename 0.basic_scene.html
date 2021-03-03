@@ -8,21 +8,18 @@
 	<meta name="author" content="WebXR Academy">
 	<link type="text/css" rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
 	<script type="module">
-		let container;
 		let camera, scene, renderer;
-		let loader;
-    let cube;
+    let mesh;
 
 		init();
 		animate();
 
 		function init() {
-			container = document.createElement('div');
+			const container = document.createElement('div');
 			document.body.appendChild(container);
 
 			// All three.js scenes need three things: a scene, a camera, and a renderer
@@ -47,27 +44,20 @@
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
-      // Add a cube to the scene
-      // const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-      const geometry = new THREE.IcosahedronGeometry(0.1, 2)
-      const material = new THREE.MeshBasicMaterial({
-        color: 0x006994,
-        opacity: 0.3,
-      });
-      
-      var pinkMat = new THREE.MeshPhongMaterial({
+      // Add a polyhedron shape to the scene
+      // More info: https://threejs.org/docs/#api/en/geometries/IcosahedronGeometry
+      const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+      const material = new THREE.MeshPhongMaterial({
         color      :  new THREE.Color("rgb(226,35,213)"),
-        emissive   :  new THREE.Color("rgb(255,128,64)"),
-        specular   :  new THREE.Color("rgb(255,155,255)"),
-        shininess  :  10,
+        shininess  :  6,
         shading    :  THREE.FlatShading,
         transparent: 1,
-        opacity    : 1
+        opacity    : 0.8
       });
       
-      cube = new THREE.Mesh(geometry, pinkMat);
-      cube.position.set(0, 0, -0.5);
-      scene.add(cube);
+      mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(0, 0, -0.5);
+      scene.add(mesh);
 
 			window.addEventListener('resize', onWindowResize, false);
 		}

@@ -1,13 +1,11 @@
 body {
 	margin: 0;
 	background-color: #000;
-	/* background-color: transparent; */
 	color: #fff;
 	font-family: Monospace;
-	font-size: 13px;
+	font-size: 16px;
 	line-height: 24px;
 	overscroll-behavior: none;
-	/* display: none; */
 }
 
 a {
