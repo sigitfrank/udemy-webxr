@@ -89,6 +89,9 @@
         // Once over 360 three.js will treat 360 as 0, 361 as 1, 362 as 2 and so on
         degrees = degrees + 0.2; 
         model.rotation.y = THREE.Math.degToRad(degrees); // we convert degrees to a radian value
+        
+        // more math utility functions can be found here:
+        // https://threejs.org/docs/#api/en/math/MathUtils
       }
     }
 
