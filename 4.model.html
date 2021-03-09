@@ -42,8 +42,12 @@
       // specify a model URL
       const modelUrl = 'https://raw.githubusercontent.com/immersive-web/webxr-samples/main/media/gltf/space/space.gltf';
       
-			// create a GLTF loader object
+			// create a GLTF loader object. GLTF is a 3D model format usually called the "JPEG of 3D" because it is
+      // fast and efficient to use, which is ideal for the web
 			loader = new THREE.GLTFLoader();
+      
+      // learn about other types of 3D model formats you can use here: 
+      // https://threejs.org/docs/#manual/en/introduction/Loading-3D-models
       
       // load the model
       // loader takes in a few arguments loader(model url, onLoad callback, onProgress callback, onError callback)
