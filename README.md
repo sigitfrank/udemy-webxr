@@ -1,7 +1,7 @@
 Intro to Augmented Reality on the Web: using WebXR and Three.js
 =================
 
-Udemy course: [https://www.udemy.com/course/](https://www.udemy.com/course/)
+Udemy course (with a discount): [https://www.udemy.com/course/intro-webxr/?couponCode=312E949E5142F90C8E68](https://www.udemy.com/course/intro-webxr/?couponCode=312E949E5142F90C8E68)
 
 
 ### Credits
