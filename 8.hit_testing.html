@@ -121,6 +121,7 @@
       let referenceSpace = null;
 
       // This function gets called just once to initialize a hitTestSource
+      // The purpose of this function is to get a) a hit test source and b) a reference space
       function initializeHitTestSource() {
         const session = renderer.xr.getSession(); // XRSession
 

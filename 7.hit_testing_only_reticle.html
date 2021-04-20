@@ -98,6 +98,7 @@
       let referenceSpace = null;
 
       // This function gets called just once to initialize a hitTestSource
+      // The purpose of this function is to get a) a hit test source and b) a reference space
       function initializeHitTestSource() {
         const session = renderer.xr.getSession(); // XRSession
 
@@ -142,13 +143,16 @@
             // we get the hit test results for a particular frame
             const hitTestResults = frame.getHitTestResults(hitTestSource);
 
-            // XRHitTestResults The hit test may find multiple surfaces. The first one in the array is the one closest to the camera.
+            // XRHitTestResults The hit test may find multiple surfaces. 
+            // The first one in the array is the one closest to the camera.
             if (hitTestResults.length) {
               const hit = hitTestResults[0];
-              // Get a pose from the hit test result. The pose represents the pose of a point on a surface.
+              // Get a pose from the hit test result. 
+              // The pose represents the pose of a point on a surface.
               const pose = hit.getPose(referenceSpace);
 
               reticle.visible = true;
+              
               // Transform/move the reticle image to the hit test position
               reticle.matrix.fromArray(pose.transform.matrix);
             } else {
