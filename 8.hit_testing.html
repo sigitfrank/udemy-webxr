@@ -117,36 +117,32 @@
       // hit testing provides the position and orientation of the intersection point, but nothing about the surfaces themselves.
 
       let hitTestSource = null;
+      let localSpace = null;
       let hitTestSourceInitialized = false;
-      let referenceSpace = null;
 
       // This function gets called just once to initialize a hitTestSource
       // The purpose of this function is to get a) a hit test source and b) a reference space
-      function initializeHitTestSource() {
+      async function initializeHitTestSource() {
         const session = renderer.xr.getSession(); // XRSession
 
         // For hit testing, we use the "viewer" reference space,
         // which is based on the device's pose at the time of the hit test.
-        session.requestReferenceSpace("viewer").then(viewerSpace => {
-          session.requestHitTestSource({ space: viewerSpace }).then(source => {
-            hitTestSource = source; // XRHitTestSource
-          });
-        });
+        const viewerSpace = await session.requestReferenceSpace("viewer");
+        hitTestSource = await session.requestHitTestSource({ space: viewerSpace });
 
         // We're going to use the reference space of "local" for drawing things.
         // which gives us stability in terms of the environment.
         // read more here: https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace
-        session.requestReferenceSpace("local").then(refSpace => {
-          referenceSpace = refSpace;
-        });
+        localSpace = await session.requestReferenceSpace("local");
 
+        // set this to true so we don't request another hit source for the rest of the session
+        hitTestSourceInitialized = true;
+        
+        // In case we close the AR session by hitting the button "End AR"
         session.addEventListener("end", () => {
           hitTestSourceInitialized = false;
           hitTestSource = null;
         });
-
-        // set this to true so we don't request another hit source for the rest of the session
-        hitTestSourceInitialized = true;
       }
 
       // the callback from 'setAnimationLoop' can also return a timestamp
@@ -157,12 +153,12 @@
         if (frame) {
           // 1. create a hit test source once and keep it for all the frames
           // this gets called only once
-          if (hitTestSourceInitialized === false) {
+          if (!hitTestSourceInitialized) {
             initializeHitTestSource();
           }
 
           // 2. get hit test results
-          if (hitTestSource !== null) {
+          if (hitTestSourceInitialized) {
             // we get the hit test results for a particular frame
             const hitTestResults = frame.getHitTestResults(hitTestSource);
 
@@ -170,7 +166,7 @@
             if (hitTestResults.length > 0) {
               const hit = hitTestResults[0];
               // Get a pose from the hit test result. The pose represents the pose of a point on a surface.
-              const pose = hit.getPose(referenceSpace);
+              const pose = hit.getPose(localSpace);
 
               reticle.visible = true;
               // Transform/move the reticle image to the hit test position
