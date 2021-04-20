@@ -82,21 +82,24 @@
       }
 
       function onSelect() {
+        // show a cone on the surface of the floor or wall every time a user clicks
+        
         if (reticle.visible) {
-          // cone added at the point of a hit test
-          // replace the next lines to add your own object in space
+          // create the cone
           const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
           const material = new THREE.MeshPhongMaterial({
-            color: 0xffffff * Math.random()
+            color: 0xffffff * Math.random();
           });
+          
           const mesh = new THREE.Mesh(geometry, material);
-
-          // set the position of the cylinder based on where the reticle is
+          
+          // set the position/orientation to match the reticle which itself matches the hit test point
           mesh.position.setFromMatrixPosition(reticle.matrix);
           mesh.quaternion.setFromRotationMatrix(reticle.matrix);
-
+          
           scene.add(mesh);
         }
+        console.log("on select")
       }
 
       function onWindowResize() {
@@ -183,6 +186,26 @@
           renderer.render(scene, camera);
         }
       }
+      
+      /*
+      function onSelect() {
+        if (reticle.visible) {
+          // cone added at the point of a hit test
+          // replace the next lines to add your own object in space
+          const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
+          const material = new THREE.MeshPhongMaterial({
+            color: 0xffffff * Math.random()
+          });
+          const mesh = new THREE.Mesh(geometry, material);
+
+          // set the position of the cylinder based on where the reticle is
+          mesh.position.setFromMatrixPosition(reticle.matrix);
+          mesh.quaternion.setFromRotationMatrix(reticle.matrix);
+
+          scene.add(mesh);
+        }
+      }
+      */
     </script>
   </body>
 </html>
