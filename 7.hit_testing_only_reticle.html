@@ -135,12 +135,16 @@
         if (frame) {
           // 1. create a hit test source once and keep it for all the frames
           // this gets called only once
-          if (hitTestSourceInitialized === false) {
-            initializeHitTestSource();
+          // if we haven't initialized the hit test source, run this once
+          if (!hitTestSourceInitialized) {
+            initializeHitTestSource().then(() => {
+              hitTestSourceInitialized = true;
+            });
           }
 
           // 2. get hit test results
-          if (hitTestSource !== null) {
+          // if we have initialized the hit test source, run this every frame
+          if (hitTestSourceInitialized) {
             // we get the hit test results for a particular frame
             const hitTestResults = frame.getHitTestResults(hitTestSource);
 
