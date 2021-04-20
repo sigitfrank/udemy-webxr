@@ -76,6 +76,8 @@
         // reticle.add(new THREE.AxesHelper(1));
       }
 
+
+
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -139,7 +141,20 @@
           
           // 2. perform a hit test and get the hit results
           if (hitTestSource !== null) {
-
+            const hitTestResults = frame.getHitTestResults(hitTestSource);
+            
+            
+            if (hitTestResults.length > 0) {
+              const hit = hitTestResults[0];
+              
+              const pose = hit.getPose(referenceSpace);
+              
+              reticle.visible = true;
+              
+              reticle.matrix.fromArray(pose.transform.matrix);
+            } else {
+              reticle.visible = false;
+            }
           }
           
           

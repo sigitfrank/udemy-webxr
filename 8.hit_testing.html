@@ -167,7 +167,7 @@
             const hitTestResults = frame.getHitTestResults(hitTestSource);
 
             // XRHitTestResults The hit test may find multiple surfaces. The first one in the array is the one closest to the camera.
-            if (hitTestResults.length) {
+            if (hitTestResults.length > 0) {
               const hit = hitTestResults[0];
               // Get a pose from the hit test result. The pose represents the pose of a point on a surface.
               const pose = hit.getPose(referenceSpace);
