@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Hit Testing - Only Reticle</title>
+    <title>Hit Testing</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="author" content="WebXR Academy">
@@ -81,9 +81,7 @@
         // reticle.add(new THREE.AxesHelper(1));
       }
 
-      function onSelect() {
-        console.log("on select");
-        
+      function onSelect() {        
         if (reticle.visible) {
           // cone added at the point of a hit test
           // replace the next lines to add your own object in space
@@ -93,8 +91,9 @@
           });
           const mesh = new THREE.Mesh(geometry, material);
           
-          // set the position of the cylinder based on where the reticle is
+          // set the position of the cylinder based on where the reticle is          
           mesh.position.setFromMatrixPosition(reticle.matrix);
+          mesh.quaternion.setFromRotationMatrix(reticle.matrix);
 
           scene.add(mesh); 
         }
