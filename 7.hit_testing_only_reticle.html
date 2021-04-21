@@ -107,13 +107,11 @@
         // which is based on the device's pose at the time of the hit test.
         const viewerSpace = await session.requestReferenceSpace("viewer");
         hitTestSource = await session.requestHitTestSource({ space: viewerSpace });
-        console.log(hitTestSource);
 
         // We're going to use the reference space of "local" for drawing things.
         // which gives us stability in terms of the environment.
         // read more here: https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace
         localSpace = await session.requestReferenceSpace("local");
-        console.log(localSpace);
 
         // set this to true so we don't request another hit source for the rest of the session
         hitTestSourceInitialized = true;
@@ -133,25 +131,23 @@
         if (frame) {
           // 1. create a hit test source once and keep it for all the frames
           // this gets called only once
-          // if we haven't initialized the hit test source, run this once
-          if(!hitTestSourceInitialized) {
+          if (!hitTestSourceInitialized) {
             initializeHitTestSource();
           }
-          
+
           // 2. get hit test results
-          // if we have initialized the hit test source, run this every frame
           if (hitTestSourceInitialized) {
+            // we get the hit test results for a particular frame
             const hitTestResults = frame.getHitTestResults(hitTestSource);
-            console.log(hitTestResults); // array, there can be more than one hit test result. 
-            // the first result in the array is the closest one to the camera
-            
+
+            // XRHitTestResults The hit test may find multiple surfaces. The first one in the array is the one closest to the camera.
             if (hitTestResults.length > 0) {
-              const hit = hitTestResults[0]; // result thats closest to the camera
-              
+              const hit = hitTestResults[0];
+              // Get a pose from the hit test result. The pose represents the pose of a point on a surface.
               const pose = hit.getPose(localSpace);
-              
+
               reticle.visible = true;
-              
+              // Transform/move the reticle image to the hit test position
               reticle.matrix.fromArray(pose.transform.matrix);
             } else {
               reticle.visible = false;
