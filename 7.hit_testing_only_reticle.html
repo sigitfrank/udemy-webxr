@@ -145,11 +145,17 @@
             console.log(hitTestResults); // array, there can be more than one hit test result. 
             // the first result in the array is the closest one to the camera
             
-            if (hitTestResults)
-            
-            
-            
-            
+            if (hitTestResults.length > 0) {
+              const hit = hitTestResults[0]; // result thats closest to the camera
+              
+              const pose = hit.getPose(localSpace);
+              
+              reticle.visible = true;
+              
+              reticle.matrix.fromArray(pose.transform.matrix);
+            } else {
+              reticle.visible = false;
+            }
           }
 
           renderer.render(scene, camera);
