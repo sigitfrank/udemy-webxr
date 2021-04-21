@@ -101,16 +101,22 @@
       // This function gets called just once to initialize a hitTestSource
       // The purpose of this function is to get a) a hit test source and b) a reference space
       async function initializeHitTestSource() {
+        const session = renderer.xr.getSession();
 
         // For hit testing, we use the "viewer" reference space,
         // which is based on the device's pose at the time of the hit test.
-        
+        const viewerSpace = await session.requestReferenceSpace("viewer");
+        hitTestSource = await session.requestHitTestSource({ space: viewerSpace });
+        console.log(hitTestSource);
 
         // We're going to use the reference space of "local" for drawing things.
         // which gives us stability in terms of the environment.
         // read more here: https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace
+        localSpace = await session.requestReferenceSpace("local");
+        console.log(localSpace);
 
         // set this to true so we don't request another hit source for the rest of the session
+        hitTestSourceInitialized = true;
         
         // In case we close the AR session by hitting the button "End AR"
         session.addEventListener("end", () => {
@@ -128,11 +134,23 @@
           // 1. create a hit test source once and keep it for all the frames
           // this gets called only once
           // if we haven't initialized the hit test source, run this once
+          if(!hitTestSourceInitialized) {
+            initializeHitTestSource();
+          }
           
-
           // 2. get hit test results
           // if we have initialized the hit test source, run this every frame
-          
+          if (hitTestSourceInitialized) {
+            const hitTestResults = frame.getHitTestResults(hitTestSource);
+            console.log(hitTestResults); // array, there can be more than one hit test result. 
+            // the first result in the array is the closest one to the camera
+            
+            if (hitTestResults)
+            
+            
+            
+            
+          }
 
           renderer.render(scene, camera);
         }
